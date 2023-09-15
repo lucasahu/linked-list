@@ -1,57 +1,133 @@
 class LinkedList {
+
+    constructor(head = null) {
+        this.head = head;
+    }
+
     append(value) {
-        //add new Node containing(value) to the end of the list
+        if (!this.head) {
+            this.head = new Node(value);
+            return this
+        }
+        let tail = this.getTail();
+        tail.next = new Node(value);
+        return tail
     }
 
     prepend(value) {
-        //add new Node containing(value) to the start of the list
+        if (!this.head) {
+            this.head = new Node(value);
+            return this
+        }
+        const prevHead = this.head;
+        this.head = new Node(value, prevHead);
     }
 
     size() {
-        //return number of Nodes in the list
+        let nodeCount = 0;
+        let counter = this.head;
+        while (counter !== null) {
+            nodeCount++;
+            counter = counter.next;
+        }
+        return nodeCount;
     }
 
-    head() {
-        //return first Node of the list
+    getHead() {
+        return this.head
     }
 
-    tail() {
-        //return last Node of the list
+    getTail() {
+        if (!this.head) return null;
+        let tail = this.head;
+        while (tail.next !== null) {
+            tail = tail.next;
+        }
+        return tail;
     }
 
     at(index) {
-        //return the Node at the given index
+        if (!this.head) return null;
+
+        let counter = this.head;
+        for (let i = 0; i < index; i++) {
+            counter = counter.next;
+        }
+        return counter ? counter : null;
     }
 
     pop() {
-        //remove last Node of the list
+        if (!this.head) return null;
+
+        if (!this.head.next) {
+            this.head = null;
+            return
+        }
+
+        let pointerBeforeTail = this.at(this.size() - 2);
+        pointerBeforeTail.next = null;
+        return this.head;
     }
 
     contains(value) {
-        //return true if value is in the list else false
+        if (!this.head) return null;
+
+        let counter = this.head;
+        while (counter !== null) {
+            if (value === counter.value) {
+                return true;
+            }
+            counter = counter.next;
+        }
+        return false;
     }
 
     find(value) {
-        //return the index of the Node containing the value or null if its not found
+        if (!this.head) return null;
+
+        let index = 0;
+        let counter = this.head;
+        while (counter !== null) {
+            index++;
+            if (value === counter.value) {
+                return index;
+            }
+            counter = counter.next;
+        }
+        return null
     }
 
     toString() {
-        //represent the LinkedList object as a string //FORMAT: (value) -> (value) -> (value) -> null
-    }
+        if (!this.head) return null;
 
-    insertAt(value, index) {
-        //insert new Node at specific index with the provided value
+        let output = "";
+        let counter = this.head;
+        while (counter.next !== null) {
+            output = `${output} ( ${counter.value} ) ->`;
+            counter = counter.next;
+        }
+        return `${output} ( ${counter.value} ) -> null`;
     }
-
-    removeAt(index) {
-        //removes the Node at given index
-    }
-
 }
 
 class Node {
-    constructor(value, nextNode) {
+    constructor(value = null, next = null) {
         this.value = value;
-        this.nextNode = nextNode;
+        this.next = next;
     }
 }
+
+const list = new LinkedList();
+
+console.log(list.prepend(1));
+console.log(list.append(2));
+console.log(list.append(3));
+console.log(list.append(4));
+console.log(list.size());
+console.log(list.getHead());
+console.log(list.getTail());
+console.log(list.at(2));
+console.log(list.pop());
+console.log(list.contains(3));
+console.log(list.find(2));
+console.log(list.toString());
